@@ -1,0 +1,26 @@
+name: fetch-audio
+on:
+  workflow_dispatch:
+    inputs:
+      audio_urls:
+        description: 'space-separated urls'
+        required: true
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: fetch
+        run: |
+          i=1
+          for u in ${{ github.event.inputs.audio_urls }}; do
+            curl -sL "$u" -o "suno_v${i}.mp3"
+            i=$((i+1))
+          done
+      - name: commit
+        run: |
+          git config user.name "argus-bot"
+          git config user.email "bot@argus.local"
+          git add '*.mp3'
+          git commit -m "suno audio fetch" || echo "nothing to commit"
+          git push
