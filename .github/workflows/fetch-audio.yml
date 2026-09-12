@@ -5,6 +5,8 @@ on:
       audio_urls:
         description: 'space-separated urls'
         required: true
+permissions:
+  contents: write
 jobs:
   fetch:
     runs-on: ubuntu-latest
